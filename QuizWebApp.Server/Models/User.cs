@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QuizWebApp.Server.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Models
 {
     public class User
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int UserId { get; set; }
 
@@ -19,9 +22,7 @@ namespace QuizApp.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public ICollection<Question> Questions { get; set; }
         public ICollection<Quiz> Quizzes { get; set; }
-        public ICollection<UserQuizAnswer> UserQuizAnswers { get; set; }
-        public ICollection<UserQuizScore> UserQuizScores { get; set; }
+        public ICollection<Take> Takens { get; set; }
     }
 }

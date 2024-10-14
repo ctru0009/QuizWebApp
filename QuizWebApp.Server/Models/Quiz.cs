@@ -1,14 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QuizWebApp.Server.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Models
 {
     public class Quiz
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int QuizId { get; set; }
 
         [Required, MaxLength(100)]
-        public string QuizName { get; set; }
+        public string QuizTitle { get; set; }
 
         public int? TimeLimit { get; set; } // Time limit in seconds, null if no limit
 
@@ -20,8 +23,8 @@ namespace QuizApp.Models
         public User User { get; set; }
 
         // Navigation property
-        public ICollection<QuizQuestion> QuizQuestions { get; set; }
-        public ICollection<UserQuizAnswer> UserQuizAnswers { get; set; }
-        public ICollection<UserQuizScore> UserQuizScores { get; set; }
+        public ICollection<Question> Questions { get; set; }
+        public ICollection<Answer> Answers{ get; set; }
+        public ICollection<Take> Takens { get; set; }
     }
 }
