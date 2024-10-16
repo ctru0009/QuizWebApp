@@ -6,6 +6,8 @@ using QuizApp.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
+using QuizWebApp.Server.Controllers;
+
 namespace QuizApp.Controllers
 {
     [Route("api/[controller]")]
@@ -83,7 +85,9 @@ namespace QuizApp.Controllers
                 .Select(u => new UserDto
                 {
                     Username = u.Username,
-                    Email = u.Email
+                    Email = u.Email,
+                    CreatedAt = u.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")
+
                 })
                 .FirstOrDefaultAsync();
 
@@ -98,6 +102,10 @@ namespace QuizApp.Controllers
         private string GenerateJwtToken(User user)
         {
             var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new InvalidOperationException("JWT_SECRET_KEY environment variable is not set.");
+            }
             var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
             var key = System.Text.Encoding.ASCII.GetBytes(secretKey);
             var tokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor()
@@ -119,21 +127,5 @@ namespace QuizApp.Controllers
         }
     }
 
-    public class RegisterUserDto
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-    public class LoginUserDto
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
 
-    public class UserDto
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-    }
 }

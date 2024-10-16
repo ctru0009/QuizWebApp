@@ -34,27 +34,32 @@ namespace QuizApp.Data
             modelBuilder.Entity<Question>()
                             .HasOne(q => q.Quiz)
                             .WithMany(q => q.Questions)
-                            .HasForeignKey(q => q.QuizId);
+                            .HasForeignKey(q => q.QuizId)
+                            .OnDelete(DeleteBehavior.Cascade);
             // Set relationship between Answer and Question
             modelBuilder.Entity<Answer>()
                             .HasOne(a => a.Question)
                             .WithMany(q => q.Answers)
-                            .HasForeignKey(a => a.QuestionId);
+                            .HasForeignKey(a => a.QuestionId)
+                            .OnDelete(DeleteBehavior.Cascade);
             // Set relationship between Answer and Quiz
             modelBuilder.Entity<Answer>()
                             .HasOne(a => a.Quiz)
                             .WithMany(q => q.Answers)
-                            .HasForeignKey(a => a.QuizId);
+                            .HasForeignKey(a => a.QuizId)
+                            .OnDelete(DeleteBehavior.Cascade);
             // Set relationship between Take and Quiz
             modelBuilder.Entity<Take>()
                             .HasOne(t => t.Quiz)
                             .WithMany(q => q.Takens)
-                            .HasForeignKey(t => t.QuizId);
+                            .HasForeignKey(t => t.QuizId)
+                            .OnDelete(DeleteBehavior.Cascade);
             // Set relationship between TakeAnswer and Take
             modelBuilder.Entity<TakeAnswer>()
                             .HasOne(ta => ta.Take)
                             .WithMany(t => t.TakeAnswers)
-                            .HasForeignKey(ta => ta.TakeId);
+                            .HasForeignKey(ta => ta.TakeId)
+                            .OnDelete(DeleteBehavior.Cascade);
             // Set relationship between TakeAnswer and Answer
             modelBuilder.Entity<TakeAnswer>()
                             .HasOne(ta => ta.Answer)
