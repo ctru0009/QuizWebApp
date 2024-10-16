@@ -18,6 +18,5 @@ namespace QuizWebApp.Server.Models
         public int QuestionId { get; set; }
         public Question Question { get; set; }
         public DateTime AnsweredAt { get; set; } = DateTime.UtcNow;
-        public string AnswerText { get; set; }
     }
 }

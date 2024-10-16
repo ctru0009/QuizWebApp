@@ -23,6 +23,6 @@ namespace QuizApp.Models
 
         // Navigation properties
         public ICollection<Quiz> Quizzes { get; set; }
-        public ICollection<Take> Takens { get; set; }
+        public ICollection<Take> Takes { get; set; }
     }
 }

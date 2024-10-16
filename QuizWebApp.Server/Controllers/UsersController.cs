@@ -6,8 +6,6 @@ using QuizApp.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
-using QuizWebApp.Server.Controllers;
-
 namespace QuizApp.Controllers
 {
     [Route("api/[controller]")]
@@ -20,9 +18,6 @@ namespace QuizApp.Controllers
         {
             _context = context;
         }
-
-        // ...
-
         // POST: api/users/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto registerUserDto)
@@ -127,5 +122,24 @@ namespace QuizApp.Controllers
         }
     }
 
+    public class RegisterUserDto
+    {
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class LoginUserDto
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class UserDto
+    {
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string CreatedAt { get; set; }
+    }
 
 }

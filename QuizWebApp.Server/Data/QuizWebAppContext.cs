@@ -1,5 +1,4 @@
-﻿using BCrypt.Net;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using QuizApp.Models;
 using QuizWebApp.Server.Models;
 
@@ -18,58 +17,63 @@ namespace QuizApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Set relationship between User and Quiz
+            // User
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // Quiz
             modelBuilder.Entity<Quiz>()
                 .HasOne(q => q.User)
                 .WithMany(u => u.Quizzes)
-                .HasForeignKey(q => q.CreatedBy);
+                .HasForeignKey(q => q.UserId);
 
-            // Set relationship between Take and User
-            modelBuilder.Entity<Take>()
-                            .HasOne(t => t.User)
-                            .WithMany(u => u.Takens)
-                            .HasForeignKey(t => t.UserId);
-
-            // Set relationship between Quiz and Question
+            // Question
             modelBuilder.Entity<Question>()
-                            .HasOne(q => q.Quiz)
-                            .WithMany(q => q.Questions)
-                            .HasForeignKey(q => q.QuizId)
-                            .OnDelete(DeleteBehavior.Cascade);
-            // Set relationship between Answer and Question
+                .HasOne(q => q.Quiz)
+                .WithMany(q => q.Questions)
+                .HasForeignKey(q => q.QuizId);
+
+            // Answer
             modelBuilder.Entity<Answer>()
-                            .HasOne(a => a.Question)
-                            .WithMany(q => q.Answers)
-                            .HasForeignKey(a => a.QuestionId)
-                            .OnDelete(DeleteBehavior.Cascade);
-            // Set relationship between Answer and Quiz
+                .HasOne(a => a.Question)
+                .WithMany(q => q.Answers)
+                .HasForeignKey(a => a.QuestionId);
+
             modelBuilder.Entity<Answer>()
-                            .HasOne(a => a.Quiz)
-                            .WithMany(q => q.Answers)
-                            .HasForeignKey(a => a.QuizId)
-                            .OnDelete(DeleteBehavior.Cascade);
-            // Set relationship between Take and Quiz
+                .HasOne(a => a.Quiz)
+                .WithMany(q => q.Answers)
+                .HasForeignKey(a => a.QuizId);
+
+            // Take
             modelBuilder.Entity<Take>()
-                            .HasOne(t => t.Quiz)
-                            .WithMany(q => q.Takens)
-                            .HasForeignKey(t => t.QuizId)
-                            .OnDelete(DeleteBehavior.Cascade);
-            // Set relationship between TakeAnswer and Take
+                .HasOne(t => t.Quiz)
+                .WithMany(q => q.Takes)
+                .HasForeignKey(t => t.QuizId);
+
+            modelBuilder.Entity<Take>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.Takes)
+                .HasForeignKey(t => t.UserId);
+
+            // TakeAnswer
             modelBuilder.Entity<TakeAnswer>()
-                            .HasOne(ta => ta.Take)
-                            .WithMany(t => t.TakeAnswers)
-                            .HasForeignKey(ta => ta.TakeId)
-                            .OnDelete(DeleteBehavior.Cascade);
-            // Set relationship between TakeAnswer and Answer
+                .HasOne(ta => ta.Take)
+                .WithMany(t => t.TakeAnswers)
+                .HasForeignKey(ta => ta.TakeId);
+
             modelBuilder.Entity<TakeAnswer>()
-                            .HasOne(ta => ta.Answer)
-                            .WithMany(a => a.TakeAnswers)
-                            .HasForeignKey(ta => ta.AnswerId);
-            // Set relationship between TakeAnswer and Question
+                .HasOne(ta => ta.Answer)
+                .WithMany(a => a.TakeAnswers)
+                .HasForeignKey(ta => ta.AnswerId);
+
             modelBuilder.Entity<TakeAnswer>()
-                            .HasOne(ta => ta.Question)
-                            .WithMany(q => q.TakeAnswers)
-                            .HasForeignKey(ta => ta.QuestionId);
+                .HasOne(ta => ta.Question)
+                .WithMany(q => q.TakeAnswers)
+                .HasForeignKey(ta => ta.QuestionId);
 
             // Seed data
             modelBuilder.Entity<User>().HasData(
