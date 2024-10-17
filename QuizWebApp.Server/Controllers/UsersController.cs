@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Data;
-using QuizApp.Models;
+using QuizWebApp.Server.DTOs;
+using QuizWebApp.Server.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -81,8 +82,7 @@ namespace QuizApp.Controllers
                 {
                     Username = u.Username,
                     Email = u.Email,
-                    CreatedAt = u.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")
-
+                    CreatedAt = u.CreatedAt
                 })
                 .FirstOrDefaultAsync();
 
@@ -122,24 +122,5 @@ namespace QuizApp.Controllers
         }
     }
 
-    public class RegisterUserDto
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class LoginUserDto
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class UserDto
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string CreatedAt { get; set; }
-    }
 
 }
