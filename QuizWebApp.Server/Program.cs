@@ -2,6 +2,8 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Data;
+using QuizWebApp.Server.Interfaces;
+using QuizWebApp.Server.Services;
 namespace QuizWebApp.Server
 {
     public class Program
@@ -22,6 +24,11 @@ namespace QuizWebApp.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            // Add services to the container.
+            builder.Services.AddTransient<IQuiz, QuizService>();
+            builder.Services.AddTransient<IQuestion, QuestionService>();
+            builder.Services.AddTransient<ITake, TakeService>();
+            builder.Services.AddTransient<ITakeAnswer, TakeAnswerService>();
 
             builder.Services.AddDbContext<QuizWebAppContext>(options =>
 options.UseNpgsql(connectionString));
