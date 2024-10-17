@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuizApp.Models
+namespace QuizWebApp.Server.Models
 {
     public class Answer
     {

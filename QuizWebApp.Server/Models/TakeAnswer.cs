@@ -1,5 +1,4 @@
 ﻿using NuGet.Packaging.Signing;
-using QuizApp.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
