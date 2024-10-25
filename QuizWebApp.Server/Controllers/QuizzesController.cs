@@ -19,7 +19,7 @@ namespace QuizWebApp.Server.Controllers
         }
 
         // GET: api/Quizzes
-        [HttpGet]
+        [HttpGet]   
         public IActionResult Get()
         {
             var quizzes = _quizService.GetQuizzes();

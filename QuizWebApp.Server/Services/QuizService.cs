@@ -28,6 +28,8 @@ namespace QuizWebApp.Server.Services
                     QuizTitle = quiz.QuizTitle,
                     UserId = quiz.UserId,
                     TimeLimit = quiz.TimeLimit,
+                    CreatedAt = quiz.CreatedAt,
+                    UpdatedAt = quiz.UpdatedAt
                 };
                 getQuizzesDto.Add(getQuizDto);
             }

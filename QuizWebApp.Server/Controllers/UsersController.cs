@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DotNetEnv;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using QuizApp.Data;
 using QuizWebApp.Server.DTOs;
 using QuizWebApp.Server.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace QuizApp.Controllers
@@ -49,7 +54,7 @@ namespace QuizApp.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto loginUserDto)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginUserDto.Username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginUserDto.Username);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginUserDto.Password, user.PasswordHash))
             {
@@ -96,29 +101,29 @@ namespace QuizApp.Controllers
 
         private string GenerateJwtToken(User user)
         {
-            var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
-            if (string.IsNullOrEmpty(secretKey))
-            {
-                throw new InvalidOperationException("JWT_SECRET_KEY environment variable is not set.");
-            }
-            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-            var key = System.Text.Encoding.ASCII.GetBytes(secretKey);
-            var tokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor()
-            {
-                Subject = new System.Security.Claims.ClaimsIdentity(new[]
-                {
-                    new System.Security.Claims.Claim("userId", user.UserId.ToString()),
-                    new System.Security.Claims.Claim("username", user.Username)
-                }),
-                Expires = System.DateTime.UtcNow.AddDays(7), // Token validity
-                SigningCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(
-                    new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(key),
-                    Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256Signature
-                )
-            };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            // Generate secret key 
+            var secretKey = "This is secret key ahsdlkjashdljkashdklajshdajklhd"; // This should be add to the environment variable for security purpose.
+            var creds = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)), SecurityAlgorithms.HmacSha256);
+            
+            var token = new JwtSecurityToken(
+                issuer: "quizapp",
+                audience: "quizapp",
+                claims: new[]
+                {
+                    new Claim("userId", user.UserId.ToString()),
+                    new Claim("username", user.Username)
+                },
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 

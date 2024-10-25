@@ -21,7 +21,7 @@ namespace QuizWebApp.Server.Controllers
         public IActionResult CreateTake(int quizId, [FromBody] TakeQuizDto take)
         {
             var createdTake = _takeService.CreateTake(take);
-            return Created();
+            return Ok(createdTake);
         }
 
         // POST: api/Takes/Submit/{takeId}

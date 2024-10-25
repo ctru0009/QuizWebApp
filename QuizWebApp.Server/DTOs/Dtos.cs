@@ -81,8 +81,25 @@ namespace QuizWebApp.Server.DTOs
     {
         public int TakeId { get; set; }
         public int QuizId { get; set; }
+        public string QuizTitle { get; set; }
         public DateTime StartedAt { get; set; }
         public int TimeLimit { get; set; }
+        public int TotalQuestion { get; set; }
+
+        public List<TakeQuestionDto> Questions { get; set; }
+    }
+
+    public class TakeQuestionDto
+    {
+        public int QuestionId { get; set; }
+        public string QuestionText { get; set; }
+        public List<GetTakeAnswerDto> takeAnswerDtos { get; set; }
+    }
+
+    public class GetTakeAnswerDto
+    {
+        public int AnswerId { get; set; }
+        public string AnswerText { get; set; }
     }
 
     public class TakeSubmitDto
@@ -105,5 +122,40 @@ namespace QuizWebApp.Server.DTOs
         public DateTime? CompletedAt { get; set; }
         public int Score { get; set; }
         public List<TakeAnswerDto> TakeAnswers { get; set; }
+    }
+
+    public class getTakeAnswersAndQuestionsDto
+    {
+        public int TakeId { get; set; }
+        public int QuizId { get; set; }
+        public DateTime StartedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
+        public int Score { get; set; }
+        public List<GetQuestionDto> Questions { get; set; }
+
+        public List<GetAnswerDto> Answers { get; set; }
+    }
+
+    public class TakeSubmitResponseDto
+    {
+        public int TakeId { get; set; }
+        public int QuizId { get; set; }
+        public string QuizTitle { get; set; }
+        public int Score { get; set; }
+        public int TotalQuestion { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime SubmitTime { get; set; }
+        public int TimeTaken { get; set; }
+        public List<ResultSubmit> Results { get; set; }
+
+    }
+    public class ResultSubmit
+    {
+        public int QuestionId { get; set; }
+        public int AnswerId { get; set; }
+        public string AnswerText { get; set; }
+        public int CorrectAnswerId { get; set; }
+        public string CorrectAnswerText { get; set; }
+        public bool IsCorrect { get; set; }
     }
 }

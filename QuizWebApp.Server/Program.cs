@@ -12,6 +12,19 @@ namespace QuizWebApp.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("*")
+                                            .AllowAnyMethod()
+                                            .AllowAnyHeader();
+                                  }
+                                  );
+            });
             // Load .env variables
             Env.Load();
 
@@ -25,6 +38,7 @@ namespace QuizWebApp.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             // Add services to the container.
+            builder.Services.AddTransient<IUser, UserService>();
             builder.Services.AddTransient<IQuiz, QuizService>();
             builder.Services.AddTransient<IQuestion, QuestionService>();
             builder.Services.AddTransient<ITake, TakeService>();
@@ -34,10 +48,9 @@ namespace QuizWebApp.Server
 options.UseNpgsql(connectionString));
 
             var app = builder.Build();
-
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
