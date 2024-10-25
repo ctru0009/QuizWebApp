@@ -25,8 +25,7 @@ QuizApp is a full-stack application built to create, manage, and participate in 
 
 ### Clone this git repo to your local machine
 ```bash
-git clone https://github.com/ctru009/QuizApp.git
-cd QuizApp
+git clone https://github.com/ctru009/QuizWebApp.git
 ```
 
 ### Create the env
